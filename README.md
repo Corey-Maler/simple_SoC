@@ -1,5 +1,14 @@
 # simple SoC
 
+## Overview
+
+![SoC architecture](https://rawgithub.com/Corey-Maler/simple_SoC/master/docs/soc.svg)
+
+### Booting process
+1. Bootloader load to RAM basic input/output system, which provide some interrupts and containts programs to display strings, run programs and other.
+2. Bootloader copy to memory code from SD-card
+3. CPU-enabled flag it turn-on and calling RESET interrupt.
+
 ### address
 
 |   addr     | module          | MNEMONIC | comment |
