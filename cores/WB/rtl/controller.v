@@ -12,7 +12,7 @@ assign W_RST = rst;
 assign W_CLK = t[3];
 
 always @(posedge clk)
-	t = t + 1;
+	t = t + 4'b0001;
 	
 	
 

@@ -1,11 +1,8 @@
 module CHARSET(clk, addr, q);
 input clk;
-input addr;
-output q;
+input [11:0] addr;
+output reg [7:0] q;
 
-wire [11:0] addr;
-
-reg [7:0] q;
 reg [7:0] chart[4096];
 
 initial $readmemh("charset.hex", chart);

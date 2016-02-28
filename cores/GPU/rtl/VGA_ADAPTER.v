@@ -37,14 +37,14 @@ always @(posedge clk)
 if (CounterXmaxed)
 	CounterX <= 0;
 else
-	CounterX <= CounterX + 1;
+	CounterX <= CounterX + 10'b1;
 	
 always @(posedge clk)
 if (CounterXmaxed)
 	if (CounterYmaxed)
 		CounterY <= 0;
 	else
-		CounterY <= CounterY + 1;
+		CounterY <= CounterY + 9'b1;
 
 always @(posedge clk)	
 begin

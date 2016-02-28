@@ -26,9 +26,16 @@ module GPU_core(
 
 reg [3:0] cbyte;
 reg [15:0] cc_code;
-reg [15:0] ccolor;
+reg ccolor;
 wire [15:0] char_code;
 
+wire [9:0] rx;
+wire [8:0] ry;
+
+reg flipVenable;
+reg flipHenable;
+
+// temporary
 assign R = ccolor;
 assign G = ccolor;
 assign B = ccolor;
@@ -41,14 +48,18 @@ initial
 begin
 	res_x <= 799;
 	res_y <= 479;
+	flipVenable <= 1'b1;
+	flipHenable <= 1'b0;
 end
 
-//			  clk, 	data_a, 	data_b,  	addr_a,					addr_b,				we_a, 	we_b, 	q_a,       	q_b (not used)
-V_RAM vram(clk, 	16'b0,  	cc_code, 	{4'd240 - y[7:4], x[8:3]}, 	16'h0, 	1'b0, 	1'b0,  	char_code);
+flipV Flip(clk, res_x, res_y, x, y, flipVenable, flipHenable, rx, ry);
 
-CHARSET charset(clk, {char_code[7:0], 4'd240 - y[3:0]}, sline);
+//			  clk, 	data_a, 	data_b,  	addr_a,					addr_b,				we_a, 	we_b, 	q_a,       	q_b (not used)
+V_RAM vram(clk, 	16'b0,  	cc_code, 	{ry[7:4], rx[8:3]}, 	16'h0, 	1'b0, 	1'b0,  	char_code);
+
+CHARSET charset(clk, {char_code[7:0], ry[3:0]}, sline);
 
 always @(posedge clk)
-	ccolor <= sline[3'b111 - x[2:0] - 1] ? 16'h0000 : 16'hFFFF;
+	ccolor <= sline[3'b111 - rx[2:0] + 3'b001] ? 1'b0 : 1'b1;
 
 endmodule
