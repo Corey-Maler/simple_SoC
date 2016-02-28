@@ -6,7 +6,7 @@ module V_RAM(
 	output reg [15:0] q_a, q_b
 );
 
-reg [15:0] RAM [64 * 32];
+reg [15:0] RAM [100 * 60];
 
 initial
 begin
