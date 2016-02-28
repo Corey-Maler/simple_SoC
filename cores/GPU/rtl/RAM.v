@@ -1,12 +1,12 @@
 module V_RAM(
 	input clk,
 	input [15:0] data_a, data_b,
-	input [10:0] addr_a, addr_b,
+	input [11:0] addr_a, addr_b,
 	input	we_a, we_b,
 	output reg [15:0] q_a, q_b
 );
 
-reg [15:0] RAM [100 * 60];
+reg [15:0] RAM [128 * 32];
 
 initial
 begin
