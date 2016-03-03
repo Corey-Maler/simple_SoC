@@ -1,1 +1,2 @@
-./cores/CPU/tb_run.sh
+cd cores/CPU
+./tb_run.sh
