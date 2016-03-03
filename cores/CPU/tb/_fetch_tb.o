@@ -1,0 +1,21 @@
+#! /usr/bin/vvp
+:ivl_version "10.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x56260fc6f2a0 .scope module, "fetch_tb" "fetch_tb" 2 1;
+ .timescale 0 0;
+    .scope S_0x56260fc6f2a0;
+T_0 ;
+    %vpi_call 2 6 "$display", "CPU | Fetch\011\011testbench" {0 0 0};
+    %vpi_call 2 8 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "tb/fetch_tb.v";
