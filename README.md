@@ -75,10 +75,10 @@ CPU 2, 3, 4 is disabled by default;
 
 #### Commands
 ``` asm
-CPU's:
+; CPU's:
  OR $cpu, b0010; // set $cpu[2] to 1 to enable CPU_2;
  AND $cpu, b1101; // set $cpu[2] to 0 to disable CPU_2;
-THREADS:
+; THREADS:
  THR_CH TH_ID; // change current thread to TH_ID. Will changes registes and stack banks.
  THR_RST TH_ID, START_ADDR; // reset TH_ID thread and set PC to START_ADDR and start thread
 ```
