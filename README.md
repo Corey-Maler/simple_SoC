@@ -62,7 +62,7 @@
 Available 4 CPU with 4 threads per CPU. 
 
 Any CPU starts from `@00_00 + 4 * CPU_ID`. For example:
-```
+``` asm
 x0000: h0F00; // reset (initial) address
 ...
 x0F00: jmp CPU_1_main; // start instruction for CPU_1
@@ -74,7 +74,7 @@ x0F0A: jmp h0F0A; // instruction for CPU_4 (awaiting for command)
 CPU 2, 3, 4 is disabled by default;
 
 #### Commands
-```
+``` asm
 CPU's:
  OR $cpu, b0010; // set $cpu[2] to 1 to enable CPU_2;
  AND $cpu, b1101; // set $cpu[2] to 0 to disable CPU_2;
