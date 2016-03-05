@@ -29,11 +29,7 @@ begin
   clk <= 0;
   #10 clk <= 1;
   #10 clk <= 0;
-  if (data_o != 32'd24)
-  begin
-    $display("ERROR!");
-    $finish;
-  end
+  $display("ASSIGN %0d %0d banana", data_o, 32'h0000_0001);
   #10 clk <= 1;
   #10 clk <= 0;
 
