@@ -1,3 +1,6 @@
+`define ASSERT(a, b, t) \
+	$display("ASSERT h'%h h'%h %s", a, b, t);
+
 module fetch_tb;
 
 reg clk;
@@ -29,7 +32,7 @@ begin
   clk <= 0;
   #10 clk <= 1;
   #10 clk <= 0;
-  $display("ASSIGN %0d %0d banana", data_o, 32'h0000_0001);
+  `ASSERT(data_o, 32'h1, "output must be a hz");
   #10 clk <= 1;
   #10 clk <= 0;
 
