@@ -1,3 +1,8 @@
+`define STATE_INIT 2'b00
+`define STATE_W_FETCH 2'b01
+`define STATE_END 2'b10
+
+
 module FETCH(
   input clk,
   input f_enable,
@@ -39,36 +44,38 @@ always @(posedge clk)
 begin
   if (f_enable)
     case (state)
-      2'b00:
-       begin
-        data_o <= 32'd234;
-	case (addr[31:28])
-	  4'b0001:
+      `STATE_INIT:
+        begin
+	  if (addr[31:28] == 4'b11)
 	  begin
-	   if (write_mode)
-	     registers[reg_select] <= data_i;
-	   else
-	     data_o <= registers[reg_select];
-	   ack <= 1;
+	    if (write_mode)
+	      registers[reg_select] <= data_i;
+	    else
+	      data_o <= registers[reg_select];
+	    ack <= 1;
+	    state <= `STATE_END;
 	  end
-	  4'b1000:
+	  else
 	  begin
             read_from_bus <= 1;
+	    state <= `STATE_W_FETCH;
 	  end
-	endcase
-        state <= 2'b01;
        end
-      2'b01: // load from WBUS
+      `STATE_W_FETCH: // load from WBUS
        begin
          if (w_ack_local)
          begin
           data_o <= w_buff;
-          state <= 0;
+	  ack <= 1;
+          state <= `STATE_END;
         end
        end
+     `STATE_END:
+       begin
+        ack <= 0;
+	state <= `STATE_INIT;
+       end
      endcase
-  else
-    ack <= 0;
 end
 
 always @(posedge W_CLK)
