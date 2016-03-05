@@ -19,7 +19,8 @@
 | `..00000` | *reset* | | |
 | `..00001` | *timer_1* | | controlled by $rt |
 | **`11_xx_xx_xx_x`** | Registers, IO, stack   | | |
-| `11_00_xxx`| | | 2 ^ 28 |
+| `11_00_...`| | | 2 ^ 28 |
+| `..yy_zz_xxxxx` | CPU `yy` thread `zz` registers bank  | | |
 | `..0xxxx`  | User Registers  | $r0-$r15 | | 
 | `..10000`  | flag register   | $rf | |
 | `..10001`  | timer interapt mask   | $rt | |
@@ -27,7 +28,8 @@
 | `..11001`  | digits on board | | |
 | `..11100`  | GPU command     | | |
 | `..11101`  | GPU data        | | |
-| `11_01_xxx` | Stack | | 2 ^ 28|
+| `11_01_...` | Stack | | 2 ^ 28|
+| `.._yy_zz` | CPU `yy` thread `zz` stack bank| | |
 
 ### flag register
 `
@@ -52,7 +54,34 @@
 * `d10` // deceminal
 * `h12` // hex
 
+#### get addr
+`&($xxxx | @xxxx | var_name)`
 
+
+### Multi CPU and threads
+Available 4 CPU with 4 threads per CPU. 
+
+Any CPU starts from `@00_00 + 4 * CPU_ID`. For example:
+``` asm
+x0000: h0F00; // reset (initial) address
+...
+x0F00: jmp CPU_1_main; // start instruction for CPU_1
+x0F04: jmp CPU_2_main; // start instruction for CPU_2
+x0F08: jmp h0F08; // instruction for CPU_3 (awaiting for command)
+x0F0A: jmp h0F0A; // instruction for CPU_4 (awaiting for command)
+```
+
+CPU 2, 3, 4 is disabled by default;
+
+#### Commands
+``` asm
+; CPU's:
+ OR $cpu, b0010; // set $cpu[2] to 1 to enable CPU_2;
+ AND $cpu, b1101; // set $cpu[2] to 0 to disable CPU_2;
+; THREADS:
+ THR_CH TH_ID; // change current thread to TH_ID. Will changes registes and stack banks.
+ THR_RST TH_ID, START_ADDR; // reset TH_ID thread and set PC to START_ADDR and start thread
+```
 
 ### Examples
 #### Hello world
