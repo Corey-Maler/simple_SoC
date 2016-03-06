@@ -1,10 +1,7 @@
-`define ASSERT(a, b, t) \
-	$display("ASSERT h'%h h'%h %s", a, b, t);
-
 module fetch_tb;
 
 reg clk;
-
+a<
 reg f_enable;
 reg write_mode;
 reg [1:0] thread;
