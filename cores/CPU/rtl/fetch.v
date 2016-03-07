@@ -30,7 +30,7 @@ reg w_buff;
 reg w_ack_local;
 
 wire [4:0] reg_select;
-reg [31:0] registers[32];
+reg [31:0] registers[0:32];
 
 assign reg_select = {thread, addr[2:0]}; 
 
