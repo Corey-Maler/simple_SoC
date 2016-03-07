@@ -97,3 +97,7 @@ if len(_errs) > 0:
   print colored('Errors:', 'red')
   for e in _errs:
     print colored('Error:', 'red'), ' %s' % e
+  exit(4) # done with errors...
+
+if len(_failed)
+  exit(3) # done with failed tests
