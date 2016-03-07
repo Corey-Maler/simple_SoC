@@ -3,9 +3,15 @@ from os import walk
 from os.path import join, isdir
 from os import listdir
 
+from termcolor import colored
+
 import subprocess
 import re
 
+
+_warns = []
+
+_errs = []
 
 root = './cores/'
 assertF = './cores/helpers/tb.v'
@@ -44,6 +50,26 @@ for core in cores:
 
     print '__ OUT'
     print out
-    print '__ err'
-    print err
 
+    ers = err.splitlines()
+    for er in ers:
+      if 'warning' in er:
+        _warns.append(er)
+      else:
+	_errs.append(er)
+
+
+print ''
+print ''
+if len(_errs) > 0:
+  print colored('FINISHED WITH ERRORS', 'red', attrs=['bold'])
+else:
+  print colored('Done!', 'green')
+
+print colored('Warnings:', 'yellow')
+for w in _warns:
+  print colored('Warn:', 'yellow'), ' %s' % w
+
+print colored('Errors:', 'red')
+for e in _errs:
+  print colored('Error:', 'red'), ' %s' % e
