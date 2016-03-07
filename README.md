@@ -1,4 +1,5 @@
 # simple SoC
+![Build status](https://api.travis-ci.org/Corey-Maler/simple_SoC.svg)
 
 ## Overview
 
