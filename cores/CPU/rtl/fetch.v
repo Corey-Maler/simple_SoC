@@ -99,6 +99,7 @@ begin
      begin
        w_ack_local <= 0;
        w_state <= 2'b00;
+       W_ADDR <= 32'hz;
      end
     default:
      w_ack_local <= 0;

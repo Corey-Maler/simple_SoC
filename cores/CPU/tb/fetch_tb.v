@@ -168,6 +168,9 @@ begin:tb
 
   W_ACK <= 1'b0;
 
+  #10 clk <= 1;
+  #10 clk <= 0;
+
   #10 W_CLK <= 1;
   #10 W_CLK <= 0;
   
