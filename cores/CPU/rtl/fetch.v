@@ -33,7 +33,7 @@ wire [4:0] reg_select;
 
 assign reg_select = {thread, addr[2:0]}; 
 
-reg [31:0] registers [8 * 4 * 4];
+reg [31:0] registers[32];
 
 initial
 begin
