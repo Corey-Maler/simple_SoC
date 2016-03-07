@@ -13,6 +13,11 @@ _warns = []
 
 _errs = []
 
+_total = 0
+
+_failed = 0
+_success = 0
+
 root = './cores/'
 assertF = './cores/helpers/tb.v'
 
@@ -22,6 +27,9 @@ regex = re.compile(r"/")
 
 MOD_NAME = re.compile('(\\w+)$')
 TB_NAME = re.compile('(\\w+)_tb.v$')
+ASSER = re.compile('ASSERT h\'(\\w+) h\'(\\w+) ([\\w\s]+)')
+
+print colored('Starting testing', attrs=['bold'])
 
 for core in cores:
   if not isdir(join(core, 'tb')):
@@ -47,8 +55,22 @@ for core in cores:
     p = subprocess.Popen(comm, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = p.communicate()
 
-    print '__ OUT'
-    print out
+    if len(out) > 0:
+      asdf = out.splitlines()
+      for ass in asdf:
+        _total = _total + 1
+
+        dsd = ASSER.search(ass)
+	r1 = dsd.group(1)
+	r2 = dsd.group(2)
+	comm = dsd.group(3)
+
+	if r1 == r2:
+	  _success = _success + 1
+	  print colored('ok', 'green'), " %s" % comm
+	else:
+          _failed = _failed + 1
+	  print colored('fail', 'red'), "%s != %s, %s" % (r1, r2, comm)
 
     ers = err.splitlines()
     for er in ers:
@@ -65,10 +87,13 @@ if len(_errs) > 0:
 else:
   print colored('Done!', 'green')
 
+print 'Testcases: %s, ' % _total, colored('successful: %s, ' % _success, 'green'), colored('Failed: %s ' % _failed, 'red')
+
 print colored('Warnings:', 'yellow')
 for w in _warns:
   print colored('Warn:', 'yellow'), ' %s' % w
 
-print colored('Errors:', 'red')
-for e in _errs:
-  print colored('Error:', 'red'), ' %s' % e
+if len(_errs) > 0:
+  print colored('Errors:', 'red')
+  for e in _errs:
+    print colored('Error:', 'red'), ' %s' % e

@@ -1,7 +1,6 @@
 module fetch_tb;
 
 reg clk;
-a<
 reg f_enable;
 reg write_mode;
 reg [1:0] thread;
@@ -24,8 +23,6 @@ FETCH fetch1(clk, f_enable, write_mode, addr, data_i, thread, data_o, ack, W_CLK
 
 initial
 begin
-  $display("CPU | Fetch		testbench");
-
   clk <= 0;
   #10 clk <= 1;
   #10 clk <= 0;
