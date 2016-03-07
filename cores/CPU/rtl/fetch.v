@@ -37,16 +37,18 @@ assign reg_select = {thread, addr[2:0]};
 
 initial
 begin
+ state <= `STATE_INIT;
  data_o <= 0;
+ ack <= 0;
 end
 
 always @(posedge clk)
 begin
-  if (f_enable)
-    case (state)
-      `STATE_INIT:
-        begin
-	  if (addr[31:28] == 4'b11)
+  case (state)
+    `STATE_INIT:
+      if (f_enable)
+      begin
+        if (addr[31:28] == 4'hF)
 	  begin
 	    if (write_mode)
 	      registers[reg_select] <= data_i;
@@ -61,7 +63,7 @@ begin
 	    state <= `STATE_W_FETCH;
 	  end
        end
-      `STATE_W_FETCH: // load from WBUS
+    `STATE_W_FETCH: // load from WBUS
        begin
          if (w_ack_local)
          begin
@@ -70,12 +72,12 @@ begin
           state <= `STATE_END;
         end
        end
-     `STATE_END:
+    `STATE_END:
        begin
         ack <= 0;
 	state <= `STATE_INIT;
        end
-     endcase
+  endcase
 end
 
 always @(posedge W_CLK)

@@ -23,14 +23,106 @@ FETCH fetch1(clk, f_enable, write_mode, addr, data_i, thread, data_o, ack, W_CLK
 
 initial
 begin:tb
+
   clk <= 0;
-  #10 clk <= 1;
+  thread = 0;
+
+  // write registers
+
+  f_enable <= 1;
+  write_mode <= 1;
+  addr <= 32'hFFFF_FFF0; // r0
+  data_i <= 32'h1111_1111;
+  
+  #10 clk <= 1'b1;
+
   #10 clk <= 0;
-  `ASSERT(data_o, 32'h1, "output must be a hz")
+
+  `ASSERT(ack, 1'b1, "reg write must be in one tick")
+  f_enable <= 0;
+
+  #10 clk <= 1;
+
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b0, "ack must be reseted to zero")
+
+  f_enable <= 1'b1;
+  addr <= 32'hFFFF_FFF1; // r1
+  data_i <= 32'h2222_1111;
+
+  #10 clk <= 1'b1;
+
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b1, "set another register")
+  f_enable <= 1'b0;
+
   #10 clk <= 1;
   #10 clk <= 0;
 
+  `ASSERT(ack, 1'b0, "ack must be reseted")
 
+  thread <= 2'b01; // switch to another thread
+
+  addr <= 32'hFFFF_FFF0; // r0 thread 2
+  data_i <= 32'h1111_22222;
+
+  f_enable <= 1;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  addr <= 32'hFFFF_FFF1; // r1 thread 2
+  data_i <= 32'h2222_2222;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b1, "setup second reg in second thread")
+
+  f_enable <= 0;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b0, "registers setted all must be clean here")
+  
+  // ------------ //
+  // cheking read //
+  // ------------ //
+
+  write_mode <= 0;
+  f_enable <= 1;
+  thread <= 0;
+  addr <= 32'hFFFF_FFF0;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+  `ASSERT(ack, 1'b1, "read from register ack in 1 tick")
+  `ASSERT(data_o, 32'h1111_1111, "checking read from register");
+
+  f_enable <= 0;
+  #10 clk <= 1;
+  #10 clk <= 0;
+  
+  f_enable <= 1;
+  thread <= 1;
+  addr <= 32'hFFFF_FFF1;
+  
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(data_o, 32'h2222_2222, "checking read r1 thread 1")
+  f_enable <= 0;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b0, "all clearing")
 
   $finish;
 end
