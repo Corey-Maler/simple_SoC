@@ -22,7 +22,7 @@ FETCH fetch1(clk, f_enable, write_mode, addr, data_i, thread, data_o, ack, W_CLK
 
 
 initial
-begin
+begin:tb
   clk <= 0;
   #10 clk <= 1;
   #10 clk <= 0;

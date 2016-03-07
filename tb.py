@@ -99,5 +99,5 @@ if len(_errs) > 0:
     print colored('Error:', 'red'), ' %s' % e
   exit(4) # done with errors...
 
-if len(_failed):
+if _failed:
   exit(3) # done with failed tests
