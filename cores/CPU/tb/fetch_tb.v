@@ -26,7 +26,7 @@ begin:tb
   clk <= 0;
   #10 clk <= 1;
   #10 clk <= 0;
-  `ASSERT(data_o, 32'h1, "output must be a hz");
+  `ASSERT(data_o, 32'h1, "output must be a hz")
   #10 clk <= 1;
   #10 clk <= 0;
 
