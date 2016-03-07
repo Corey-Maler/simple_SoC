@@ -38,14 +38,11 @@ for core in cores:
     print colored('Testing:', attrs=['bold']), '%s | %s ' % (core_name, tb_name)
 
     o_file = join('./tmp/', g[2:].replace('/','_') +'.o')
-    print "o_file %s" % o_file
 
     args = ' '.join([assertF, ' '.join(fils), g, '-o', o_file])
-    print args
 
     comm = 'iverilog %s && vvp %s' % (args, o_file)
 
-    print comm
 
     p = subprocess.Popen(comm, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = p.communicate()
