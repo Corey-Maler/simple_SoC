@@ -18,22 +18,24 @@ assertF = './cores/helpers/tb.v'
 
 cores = [join(root, f) for f in listdir(root) if isdir(join(root, f))]
 
-print cores
-
 regex = re.compile(r"/")
+
+MOD_NAME = re.compile('(\\w+)$')
+TB_NAME = re.compile('(\\w+)_tb.v$')
 
 for core in cores:
   if not isdir(join(core, 'tb')):
     continue
-  print '--- search in %s' % core
   fils = []
   for g in glob.glob(join(core, 'rtl', '*.v')):
     fils.append(g)
 
-  print fils
-  for g in glob.glob(join(core, 'tb', '*.v')):
+  for g in glob.glob(join(core, 'tb', '*_tb.v')):
     # run test
-    print 'tb %s' % g
+    core_name = MOD_NAME.search(core).group()
+    tb_name = TB_NAME.search(g).group(1)
+
+    print colored('Testing:', attrs=['bold']), '%s | %s ' % (core_name, tb_name)
 
     o_file = join('./tmp/', g[2:].replace('/','_') +'.o')
     print "o_file %s" % o_file
