@@ -55,7 +55,6 @@ begin
 	    else
 	      data_o <= registers[reg_select];
 	    ack <= 1;
-	    state <= `STATE_END;
 	  end
 	  else
 	  begin
@@ -63,19 +62,16 @@ begin
 	    state <= `STATE_W_FETCH;
 	  end
        end
+       else
+         ack <= 0;
     `STATE_W_FETCH: // load from WBUS
        begin
          if (w_ack_local)
          begin
           data_o <= w_buff;
 	  ack <= 1;
-          state <= `STATE_END;
+          state <= `STATE_INIT;
         end
-       end
-    `STATE_END:
-       begin
-        ack <= 0;
-	state <= `STATE_INIT;
        end
   endcase
 end

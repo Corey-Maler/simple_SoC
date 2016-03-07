@@ -73,9 +73,7 @@ begin:tb
   #10 clk <= 1;
   #10 clk <= 0;
 
-  #10 clk <= 1;
-  #10 clk <= 0;
-
+  // fast forward
   addr <= 32'hFFFF_FFF1; // r1 thread 2
   data_i <= 32'h2222_2222;
 
@@ -105,11 +103,8 @@ begin:tb
   `ASSERT(ack, 1'b1, "read from register ack in 1 tick")
   `ASSERT(data_o, 32'h1111_1111, "checking read from register");
 
-  f_enable <= 0;
-  #10 clk <= 1;
-  #10 clk <= 0;
-  
-  f_enable <= 1;
+  // fast forward read
+
   thread <= 1;
   addr <= 32'hFFFF_FFF1;
   
