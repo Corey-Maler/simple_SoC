@@ -38,6 +38,7 @@ assign reg_select = {thread, addr[2:0]};
 initial
 begin
  state <= `STATE_INIT;
+ w_state <= 2'b00;
  data_o <= 0;
  ack <= 0;
 end
@@ -84,6 +85,8 @@ begin
        begin
 	 W_ADDR <= addr;
 	 w_state <= 2'b01;
+	 W_DATA_O <= data_i;
+	 W_WRITE <= write_mode;
       end
     2'b01:
      if (W_ACK) // wait W_BUS ack

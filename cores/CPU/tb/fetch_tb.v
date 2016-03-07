@@ -119,6 +119,64 @@ begin:tb
 
   `ASSERT(ack, 1'b0, "all clearing")
 
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  // -----
+  // checking RAM
+  //
+
+  W_ACK <= 0; 
+
+  write_mode <= 1;
+  addr <= 32'h0000_0001;
+  f_enable <= 1;
+  data_i <= 32'h0000_0011;
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(W_ADDR, 32'hxxxx_xxxx, "do not use bus before W_ACK")
+
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b0, "fetch must not set ACK before W_ACK")
+  
+  W_CLK <= 1;
+  
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b0, "fetch still must not set ACK before W_ACK")
+  `ASSERT(W_ADDR, 32'h0000_0001, "Set address on W_ACK")
+  `ASSERT(W_DATA_O, 32'h0000_0011, "Set data on W_ACK")
+  `ASSERT(W_WRITE, 1'b1, "Writing mode")
+
+  #10 clk <= 1;
+  W_CLK <= 0;
+
+  #10 clk <= 0;
+  W_CLK <= 1;
+
+  #10 W_CLK <= 0;
+  `ASSERT(ack, 1'b0, "fetch still must not set ACK before W_ACK")
+  W_ACK <= 1'b1;
+
+  #10 W_CLK <= 1;
+  #10 W_CLK <= 0;
+
+  W_ACK <= 1'b0;
+
+  #10 W_CLK <= 1;
+  #10 W_CLK <= 0;
+  
+  #10 clk <= 1;
+  #10 clk <= 0;
+
+  `ASSERT(ack, 1'b1, "Command done")
+  `ASSERT(W_ADDR, 32'hz, "Buss unsetted")
+
   $finish;
 end
 
