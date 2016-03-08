@@ -36,7 +36,7 @@
 | --- | --- | --- | --- | --- |
 | ADD | z, x, y |  Add |  | z = x + y  |      |
 | AND | z, x, y | Bitwise AND |  | z = x & y |
-| CMN | x, y | Compare negative | | $rf[2] = x < y |
+| CMN | x, y | Compare soft (bigger or equal)| | $rf[2] = x >= y |
 | CMP | x, y | Compare  |  | $rf[2] = x > y |
 | INT | x | software interrup |  |  |
 | JMP | label | jump to label | | $CP = label |
@@ -57,13 +57,23 @@
 | SUB | z, x, y | sub | | z = x - y |
 | WFI | - | Wait for Interrupt | | |
 
+#### Conditions
+All instructions can have a postfix
 
-### flag register
+```
+_z - skip if $rf[1] is false (last operator not return zero)
+_c - skip if $rf[2] is false (last condition is not true)
+_m - skip if $rf[3] is false
+```
+
+#### flag register
 ```
 [0] -- carry
 [1] -- does result of last operation is zero
 [2] -- last compare result
-````
+[3] -- mult overflow (last operator was mult and mult_h is zeros)
+```
+
 ### Adressing:
 #### Direct:
 `$r0 - $r15` registers
