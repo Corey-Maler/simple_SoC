@@ -74,6 +74,27 @@ _m - skip if $rf[3] is false
 [3] -- mult overflow (last operator was mult and mult_h is zeros)
 ```
 
+#### instruction structure
+
+```
+0
+1
+2    is ALU command
+
+3 |
+  |  command
+8 |
+
+10   _z postfix
+11   _c postfix
+12   _m postfix
+
+28
+29   direct/indirect z
+30   direct/indirect x
+31   direct/indirect y
+```
+
 ### Adressing:
 #### Direct:
 `$r0 - $r15` registers
