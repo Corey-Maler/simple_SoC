@@ -11,9 +11,13 @@ wire [31:0] mult_l;
 
 wire [31:0] zand, zor, zxor, znot;
 
+wire [31:0] sub, ashiftl, ashiftr;
+
+wire [31:0] lshiftl, lshiftr;
+
 reg fake;
 
-ALU alu1(x, y, carry, summ, ocarry, mult_h, mult_l, zand, zor, zxor, znot);
+ALU alu1(x, y, carry, summ, ocarry, mult_h, mult_l, zand, zor, zxor, znot, sub, ashiftl, ashiftr, lshiftl, lshiftr);
 
 initial
 begin
@@ -46,9 +50,13 @@ y <= 32'hffff_ffff;
 `ASSERT(ocarry, 1'b1, "Carry must be high")
 
 
+x <= 32'h7fff_ffff; // unsigned mult
+y <= 32'h7fff_ffff;
 // overflow flag and other flags sets by outher module
 
-`ASSERT(mult_h, 32'hffff_fffe, "Mult hight")
+#10 fake <= 1'b1;
+
+`ASSERT(mult_h, 32'h3fff_ffff, "Mult hight")
 `ASSERT(mult_l, 32'h0000_0001, "Mult low")
 
 x <= 32'b0011_0011_0011_0011_0011_0011_0011_0011;
@@ -60,6 +68,24 @@ y <= 32'b1111_0000_1010_0101_1100_1001_0110_1011;
 `ASSERT(zor,  32'b1111_0011_1011_0111_1111_1011_0111_1011, "OR")
 `ASSERT(zxor, 32'b1100_0011_1001_0110_1111_1010_0101_1000, "XOR")
 `ASSERT(znot, 32'b1100_1100_1100_1100_1100_1100_1100_1100, "OR")
+
+x <= 10;
+y <= -20;
+
+#10 fake <= 1'b1;
+
+`ASSERT(summ, -10, "Check substruction")
+`ASSERT(sub, 30, "Check SUB")
+
+x <= 32'sb1000_0000_0000_0000_0000_0011_0000_0001;
+y <= 32'h0000_0002;
+
+#10 fake <= 1'b1;
+
+`ASSERT(ashiftl, 32'b0000_0000_0000_0000_0000_1100_0000_0100, "Shift left")
+`ASSERT(ashiftr, 32'b1110_0000_0000_0000_0000_0000_1100_0000, "Shift left")
+`ASSERT(lshiftl, 32'b0000_0000_0000_0000_0000_1100_0000_0100, "Shift left")
+`ASSERT(lshiftr, 32'b0010_0000_0000_0000_0000_0000_1100_0000, "Shift left")
 
 end
 
