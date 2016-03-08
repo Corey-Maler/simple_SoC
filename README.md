@@ -21,8 +21,7 @@
 | `..00001` | *timer_1* | | controlled by $rt |
 | **`11_xx_xx_xx_x`** | Registers, IO, stack   | | |
 | `11_00_...`| | | 2 ^ 28 |
-| `..yy_zz_xxxxx` | CPU `yy` thread `zz` registers bank  | | |
-| `..0xxxx`  | User Registers  | $r0-$r15 | | 
+| `..0xxxx`  | User Registers  | $r0-$r15 | |
 | `..10000`  | flag register   | $rf | |
 | `..10001`  | timer interapt mask   | $rt | |
 | `..10010`  | stack head | $st | |
@@ -30,13 +29,41 @@
 | `..11100`  | GPU command     | | |
 | `..11101`  | GPU data        | | |
 | `11_01_...` | Stack | | 2 ^ 28|
-| `.._yy_zz` | CPU `yy` thread `zz` stack bank| | |
+
+### instruction set summary
+
+| Mnemonic | Operands | Brief description | Flags | so |
+| --- | --- | --- | --- | --- |
+| ADD | z, x, y |  Add |  | z = x + y  |      |
+| AND | z, x, y | Bitwise AND |  | z = x & y |
+| CMN | x, y | Compare negative | | $rf[2] = x < y |
+| CMP | x, y | Compare  |  | $rf[2] = x > y |
+| INT | x | software interrup |  |  |
+| JMP | label | jump to label | | $CP = label |
+| JMPR | shift | jump relative | | $CP = $CP + shift |
+| XOR | z, x, y | Exclusive or | | z = x ^ y |
+| MOV | z, x | Move x to z | | z <= x |
+| lsls | z, x, y | logical shift left | | z = x << y |
+| lsrs | z, x, y | logical shift right | | z = x >> y |
+| MUL | z, x, y | Multiply | | z = x * y |
+| NOT | z, x | Bitwise NOT | | z = !x |
+| NOP | - | No Operation | | |
+| ORR | z, x, y | OR | | z = x \| y
+| POP | r | pop register from stack | | |
+| PUSH| r | push register to stack | | |
+| REV | z, x | byte-reverse word | | |
+| RORS | z, x, y | Rotate Right | | |
+| RSVS | z, x | Reverse int | | z = 0 - x |
+| SUB | z, x, y | sub | | z = x - y |
+| WFI | - | Wait for Interrupt | | |
+
 
 ### flag register
-`
+```
 [0] -- carry
 [1] -- does result of last operation is zero
-`
+[2] -- last compare result
+````
 ### Adressing:
 #### Direct:
 `$r0 - $r15` registers
@@ -60,7 +87,7 @@
 
 
 ### Multi CPU and threads
-Available 4 CPU with 4 threads per CPU. 
+Available 4 CPU with 4 threads per CPU.
 
 Any CPU starts from `@00_00 + 4 * CPU_ID`. For example:
 ``` asm

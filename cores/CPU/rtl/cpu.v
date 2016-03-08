@@ -12,6 +12,21 @@ module CPU (
 
 reg [31:0] temp;
 
+reg f_enable;
+reg write_mode;
+
+reg W_WRITE;
+
+reg [31:0] addr;
+reg [31:0] data_i;
+wire [31:0] data_o;
+
+reg [1:0] thread;
+
+wire ack;
+
+FETCH fetch1 (clk, f_enable, write_mode,  addr, data_i, thread, data_o, ack, W_CLK,  W_ACK, W_DAT_I, W_DAT_O, W_ADDR, W_WRITE);
+
 initial
 begin
 	W_DAT_O = 32'h01234567;
