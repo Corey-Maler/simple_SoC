@@ -31,7 +31,7 @@ module CPU (
 	output reg[31:0] W_ADDR
 );
 
-reg [3:0] state;
+reg [4:0] state;
 
 reg [31:0] CP;
 
@@ -43,95 +43,125 @@ reg f_ack;
 
 always @(posedge clk)
 begin
- case (state)
-   `INIT:
-     // check interrupts
-     state <= `LOAD_INST;  
-   
-   `LOAD_INST_1:
-     begin
-     
-       state <= `LOAD_INST_2;
-     end
+  case (state)
+    `INIT:
+      begin
+        // check interrupts
+        state <= `LOAD_INST_1;  
+      end
 
-   `LOAD_INST_2:  
-     begin
-       state <= `DEC_INST;
-     end
+    `LOAD_INST_1:
+      begin
+        state <= `LOAD_INST_2;
+      end
 
-   `DEC_INST:
-     begin
-       if (skip):
-       begin
-         CP <= CP + 32'd4;
-         state <= `INIT;
-       end
-       else:
-       if (f_op1):
-         state <= `FETCH_OP1_1;
-       else:
-         state <= `COMPUTE;
-     end
+    `LOAD_INST_2:  
+      if (f_ack)
+        begin
+          state <= `DEC_INST;
+        end
 
-   `FETCH_OP1_1:
-     begin
-       state <= `FETCH_OP1_2;
-     end
+    `DEC_INST:
+      begin
+        if (skip)
+        begin
+          CP <= CP + 32'd4;
+          state <= `INIT;
+        end
+        else
+        if (f_op1)
+          state <= `FETCH_OP1_1;
+        else
+          state <= `COMPUTE;
+      end
 
-   `FETCH_OP1_2:
-     begin
-       // if FETCH_ACK
-       if (f_op2):
-         state <= `FETCH_OP2;
-       else:
-         state <= `LOAD_OP1;
-     end
-   `FETCH_OP2:
-     begin
+    `FETCH_OP1_1:
+      begin
+        state <= `FETCH_OP1_2;
+      end
 
-       if (f_op3):
-         state <= `FETCH_OP3;
-       else:
-         state <= `LOAD_OP1;
+    `FETCH_OP1_2:
+      if (f_ack)
+      begin
+        if (f_op2)
+          state <= `FETCH_OP2_1;
+        else
+          state <= `LOAD_OP2_1;
+      end
 
-     end
-   `FETCH_OP3:
-     begin
+    `FETCH_OP2_1:
+      begin
+        state <= `FETCH_OP2_2;
+      end
 
+    `FETCH_OP2_2:
+      if (f_ack)
+        begin
+          if (f_op3)
+            state <= `FETCH_OP3_1;
+          else
+            state <= `LOAD_OP2_1;
+        end
 
-       state <= `LOAD_OP1;
-     end
-   `LOAD_OP2:
-     begin
-       if (f_op2):
-       	 state <= `LOAD_OP2;
-       else:
-         state <= `LOAD_COMPUTE;
-     end
-   `LOAD_OP3:
-     begin
+    `FETCH_OP3_1:
+      begin
+        state <= `FETCH_OP3_2;
+      end
 
-       state <= `COMPUE;  
-     end
-   `COMPUTE:
-     begin
+    `FETCH_OP3_2:
+      if (f_ack)
+        begin
+          state <= `LOAD_OP2_1;
+        end
 
+    `LOAD_OP2_1:
+      begin
+        state <= `LOAD_OP2_2;
+      end
 
-       if (f_store):
-         state <= `STORE;
-       else
-         state <= `NEXT;
-     end
-   `STORE:
-     begin
-     
+    `LOAD_OP2_2:
+      if (f_ack)
+        begin
+          if (f_op3)
+       	    state <= `LOAD_OP3_1;
+          else
+           state <= `COMPUTE;
+        end
+
+    `LOAD_OP3_1:
+      begin
+        state <= `LOAD_OP3_2;
+      end
+
+    `LOAD_OP3_2:
+      if (f_ack)
+      begin
+        state <= `COMPUTE;  
+      end
+
+    `COMPUTE:
+      begin
+        if (f_store)
+          state <= `STORE_1;
+        else
+          state <= `NEXT;
+      end
+
+    `STORE_1:
+      begin
+        state <= `STORE_2;
+      end
+
+    `STORE_2:
+      if (f_ack)
+      begin
        state <= `NEXT;
-     end
-   `NEXT:
-     begin
-       
-       state <= `INOT;
-     end
+      end
+
+    `NEXT:
+      begin
+        state <= `INIT;
+      end
 
   endcase
 end
