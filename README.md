@@ -1,7 +1,7 @@
 # simple SoC
 [![Build status](https://api.travis-ci.org/Corey-Maler/simple_SoC.svg)](https://travis-ci.org/Corey-Maler/simple_SoC)
 
-## Overview
+## SoC architecture overview
 
 ![SoC architecture](https://rawgithub.com/Corey-Maler/simple_SoC/master/docs/soc.svg)
 
@@ -10,7 +10,7 @@
 2. Bootloader copy to memory code from SD-card
 3. CPU-enabled flag it turn-on and calling RESET interrupt.
 
-### address
+### Addresses map
 
 |   addr     | module          | MNEMONIC | comment |
 |        ---:|:---             | :--- | :--- |
@@ -32,7 +32,7 @@
 
 ### instruction set summary
 
-| Mnemonic | Operands | Brief description | Flags | so |
+| Mnemonic | Operands | Brief description | Flags | Operation |
 | --- | --- | --- | --- | --- |
 | ADD | z, x, y |  Add |  | z = x + y  |      |
 | AND | z, x, y | Bitwise AND |  | z = x & y |
@@ -66,7 +66,7 @@ _c - skip if $rf[2] is false (last condition is not true)
 _m - skip if $rf[3] is false
 ```
 
-#### flag register
+#### Flag register
 ```
 [0] -- carry
 [1] -- does result of last operation is zero
@@ -74,7 +74,7 @@ _m - skip if $rf[3] is false
 [3] -- mult overflow (last operator was mult and mult_h is zeros)
 ```
 
-#### instruction structure
+#### Instruction structure
 
 ```
 0
@@ -105,7 +105,7 @@ _m - skip if $rf[3] is false
 `@xxxx`
 
 #### relative
-`+xxxx` // don't know
+`+xxxx`
 
 #### constant
 * `b1100_1111` // binary
@@ -135,11 +135,12 @@ CPU 2, 3, 4 is disabled by default;
 #### Commands
 ``` asm
 ; CPU's:
- OR $cpu, b0010; // set $cpu[2] to 1 to enable CPU_2;
- AND $cpu, b1101; // set $cpu[2] to 0 to disable CPU_2;
+ OR  $cpu, b0010 ;  set $cpu[2] to 1 to enable CPU_2;
+ AND $cpu, b1101 ;  set $cpu[2] to 0 to disable CPU_2;
 ; THREADS:
- THR_CH TH_ID; // change current thread to TH_ID. Will changes registes and stack banks.
- THR_RST TH_ID, START_ADDR; // reset TH_ID thread and set PC to START_ADDR and start thread
+ THR_CH   TH_ID ;  change current thread to TH_ID. Will changes registes and stack pointer bank.
+ THR_RST  TH_ID, START_ADDR ; reset TH_ID thread and set PC to START_ADDR and start thread
+ THR_SYCN uniq_id ; 
 ```
 
 ### Examples
@@ -153,11 +154,4 @@ _STR "Wake up, Neo\b_";
 .PROGRAM
 push addr(_STR);
 call print;
-```
-
-### BUS
-
-```
-  ACK
-
 ```
