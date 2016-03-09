@@ -4,14 +4,14 @@ reg [31:0] x, y;
 reg carry;
 
 wire ocarry;
-wire [31:0] summ;
+wire signed [31:0] summ;
 
 wire [31:0] mult_h;
 wire [31:0] mult_l;
 
 wire [31:0] zand, zor, zxor, znot;
 
-wire [31:0] sub, ashiftl, ashiftr;
+wire signed [31:0] sub, ashiftl, ashiftr;
 
 wire [31:0] lshiftl, lshiftr;
 
