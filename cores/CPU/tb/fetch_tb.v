@@ -101,7 +101,7 @@ begin:tb
   #10 clk <= 1;
   #10 clk <= 0;
   `ASSERT(ack, 1'b1, "read from register ack in 1 tick")
-  `ASSERT(data_o, 32'h1111_1111, "checking read from register");
+  `ASSERT(data_o, 32'h1111_1111, "checking read from register")
 
   // fast forward read
 

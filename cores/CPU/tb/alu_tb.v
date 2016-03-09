@@ -74,8 +74,8 @@ y <= -20;
 
 #10 fake <= 1'b1;
 
-`ASSERT(summ, -10, "Check substruction")
-`ASSERT(sub, 30, "Check SUB")
+`ASSERT(summ, -32'd10, "Check substruction")
+`ASSERT(sub, 32'd30, "Check SUB")
 
 x <= 32'sb1000_0000_0000_0000_0000_0011_0000_0001;
 y <= 32'h0000_0002;
