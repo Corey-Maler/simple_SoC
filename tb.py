@@ -19,7 +19,7 @@ _failed = 0
 _success = 0
 
 root = './cores/'
-assertF = './cores/helpers/tb.v'
+assertF = join(root, 'helpers', 'tb.v')
 
 cores = [join(root, f) for f in listdir(root) if isdir(join(root, f))]
 
