@@ -4,8 +4,9 @@
 `define FETCH_OP1 4'h3
 `define FETCH_OP2 4'h4
 `define FETCH_OP3 4'h5
-`define LOAD_OP1  4'h6
-`define LOAD_OP2  4'h7
+// never load Z
+`define LOAD_OP2  4'h6
+`define LOAD_OP3  4'h7
 `define COMPUTE   4'h8
 `define STORE     4'h9
 `define NEXT      4'ha
@@ -35,10 +36,13 @@ always @(posedge clk)
 begin
  case (state)
    `INIT:
+     // check interrupts
      state <= `LOAD_INST;  
    `LOAD_INST:
      begin
 
+
+       state <= `DEC_INST;
      end
    `DEC_INST:
      begin
@@ -77,25 +81,36 @@ begin
 
        state <= `LOAD_OP1;
      end
-   `LOAD_OP1:
-     begin
-
-     end
    `LOAD_OP2:
      begin
+       if (f_op2):
+       	 state <= `LOAD_OP2;
+       else:
+         state <= `LOAD_COMPUTE;
+     end
+   `LOAD_OP3:
+     begin
 
+       state <= `COMPUE;  
      end
    `COMPUTE:
      begin
 
+
+       if (f_store):
+         state <= `STORE;
+       else
+         state <= `NEXT;
      end
    `STORE:
      begin
-
+     
+       state <= `NEXT;
      end
    `NEXT:
      begin
-
+       
+       state <= `INOT;
      end
 
   endcase
