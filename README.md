@@ -61,17 +61,22 @@
 All instructions can have a postfix
 
 ```
-_z - skip if $rf[1] is false (last operator not return zero)
-_c - skip if $rf[2] is false (last condition is not true)
+_c - skip if $rf[0] is false
+_z - skip if $rf[1] is false
+_e - skip if $rf[2] is false
 _m - skip if $rf[3] is false
+_g - skip if $rf[4] is false
+_n - skip if $rf[5] is false
 ```
 
 #### Flag register
 ```
 [0] -- carry
 [1] -- does result of last operation is zero
-[2] -- last compare result
-[3] -- mult overflow (last operator was mult and mult_h is zeros)
+[2] -- equal
+[3] -- overflow (last operator was mult and mult_h is zeros)
+[4] -- greate
+[5] -- negative
 ```
 
 #### Instruction structure
@@ -85,11 +90,13 @@ _m - skip if $rf[3] is false
   |  command
 8 |
 
-10   _z postfix
-11   _c postfix
-12   _m postfix
+10 |
+   | postfix conditions
+15 |   
 
-28
+26   absolute/relative z
+27   absolute/relative x
+28   absolute/relative y 
 29   direct/indirect z
 30   direct/indirect x
 31   direct/indirect y
@@ -106,6 +113,11 @@ _m - skip if $rf[3] is false
 
 #### relative
 `+xxxx`
+
+```
++s -- relative to $SP | 0000_xxx
++p -- relative to $PC | 1000_xxx
+```
 
 #### constant
 * `b1100_1111` // binary
