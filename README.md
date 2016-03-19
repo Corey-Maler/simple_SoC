@@ -5,6 +5,10 @@
 
 ![SoC architecture](https://rawgithub.com/Corey-Maler/simple_SoC/master/docs/soc.svg)
 
+
+Read [HellyRISC architecture overview](https://github.com/Corey-Maler/simple_SoC/blob/
+master/docs/HellyRISC.md)
+
 ### Booting process
 1. Bootloader load to RAM basic input/output system, which provide some interrupts and containts programs to display strings, run programs and other.
 2. Bootloader copy to memory code from SD-card
