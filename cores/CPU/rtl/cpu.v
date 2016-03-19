@@ -24,17 +24,17 @@ module CPU (
 	input W_RST,
 	input W_CLK,
 	
-	input wire[31:0] W_DATA_I,
+	input wire [31:0] W_DATA_I,
 	input W_ACK,
 	
-	output reg[31:0] W_DATA_O,
-	output reg[31:0] W_ADDR,
-	output W_WRITE
+	output wire [31:0] W_DATA_O,
+	output wire [31:0] W_ADDR,
+	output wire W_WRITE
 );
 
 reg [4:0] state;
 
-reg [31:0] CP;
+reg [31:0] PC;
 reg [31:0] command;
 reg [31:0] op1, op2, st_op;
 
@@ -42,24 +42,25 @@ reg [31:0] reg_a, reg_b, reg_c;
 
 reg skip;
 
-reg f_op1, f_op2, f_op3, f_store;
+reg [31:0] f_op1, f_op2, f_op3, f_store;
+
+reg [31:0] f_data_i;
 
 reg f_enable;
-reg f_write_mode;
-reg f_ack;
+reg f_write_enable;
+wire f_ack;
 
 
-reg [31:0] f_data_o;
+wire [31:0] f_data_o;
 
-reg thread;
+reg [1:0] thread;
 
 reg [31:0] addr;
-// wire f_ack;
 
 FETCH fetch_module(
 	clk, 
 	f_enable, 
-	f_write_mode,
+	f_write_enable,
 	addr,
 	f_data_i,
 	thread,
@@ -95,7 +96,7 @@ begin
 	//
 	addr <= PC;
 	f_enable <= 1'b1;
-	f_write_mode <= 1'b0;
+	f_write_enable <= 1'b0;
       end
 
     `LOAD_INST_2:  
@@ -110,7 +111,7 @@ begin
       begin
         if (skip)
         begin
-          CP <= CP + 32'd4;
+          PC <= PC + 32'd4;
           state <= `INIT;
         end
         else
@@ -123,7 +124,7 @@ begin
     `FETCH_OP1_1:
       begin
         f_enable <= 1'b1;
-	addr <= CP + 32'h1;
+	addr <= PC + 32'h1;
 
         state <= `FETCH_OP1_2;
       end
@@ -144,7 +145,7 @@ begin
     `FETCH_OP2_1:
       begin
         f_enable <= 1'b1;
-	addr <= CP + 32'h2;
+	addr <= PC + 32'h2;
         state <= `FETCH_OP2_2;
       end
 
@@ -163,7 +164,7 @@ begin
     `FETCH_OP3_1:
       begin
         f_enable <= 1'b1;
-	addr <= CP + 32'h3;
+	addr <= PC + 32'h3;
         state <= `FETCH_OP3_2;
       end
 
