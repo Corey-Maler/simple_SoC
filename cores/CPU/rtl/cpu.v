@@ -62,7 +62,7 @@ reg [31:0] addr;
 reg alu_carry;
 wire alu_ocarry;
 
-wire [31:0] alu_summ, alu_sub, alu_ashiftl1, alu_ashiftr;
+wire [31:0] alu_summ, alu_sub, alu_ashiftl, alu_ashiftr;
 wire [31:0] alu_lshiftl, alu_lshiftr;
 wire [31:0] alu_mult_h;
 wire [31:0] alu_mult_l;
