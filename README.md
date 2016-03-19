@@ -6,33 +6,13 @@
 ![SoC architecture](https://rawgithub.com/Corey-Maler/simple_SoC/master/docs/soc.svg)
 
 
-Read [HellyRISC architecture overview](https://github.com/Corey-Maler/simple_SoC/blob/
-master/docs/HellyRISC.md)
+Read [HellyRISC architecture overview](https://github.com/Corey-Maler/simple_SoC/blob/master/docs/HellyRISC.md)
 
 ### Booting process
 1. Bootloader load to RAM basic input/output system, which provide some interrupts and containts programs to display strings, run programs and other.
 2. Bootloader copy to memory code from SD-card
 3. CPU-enabled flag it turn-on and calling RESET interrupt.
 
-### Addresses map
-
-|   addr     | module          | MNEMONIC | comment |
-|        ---:|:---             | :--- | :--- |
-| **`00_xx`** - **`10_xx`** | RAM with program and data        | | |
-| `..00xxx` |  hardware interrupts | | 8 interrupts |
-| `..01xxx` | software interrupts | | 8 interrupts |
-| `..00000` | *reset* | | |
-| `..00001` | *timer_1* | | controlled by $rt |
-| **`11_xx_xx_xx_x`** | Registers, IO, stack   | | |
-| `11_00_...`| | | 2 ^ 28 |
-| `..0xxxx`  | User Registers  | $r0-$r15 | |
-| `..10000`  | flag register   | $rf | |
-| `..10001`  | timer interapt mask   | $rt | |
-| `..10010`  | stack head | $st | |
-| `..11001`  | digits on board | | |
-| `..11100`  | GPU command     | | |
-| `..11101`  | GPU data        | | |
-| `11_01_...` | Stack | | 2 ^ 28|
 
 ### instruction set summary
 
@@ -63,50 +43,6 @@ master/docs/HellyRISC.md)
 | SUB | z, x, y | sub | | z = x - y |
 | WFI | - | Wait for Interrupt | | |
 
-#### Conditions
-All instructions can have a postfix
-
-```
-_c - skip if $rf[0] is false
-_z - skip if $rf[1] is false
-_e - skip if $rf[2] is false
-_m - skip if $rf[3] is false
-_g - skip if $rf[4] is false
-_n - skip if $rf[5] is false
-```
-
-#### Flag register
-```
-[0] -- carry
-[1] -- does result of last operation is zero
-[2] -- equal
-[3] -- overflow (last operator was mult and mult_h is zeros)
-[4] -- greate
-[5] -- negative
-```
-
-#### Instruction structure
-
-```
-0
-1
-2    is ALU command
-
-3 |
-  |  command
-8 |
-
-10 |
-   | postfix conditions
-15 |   
-
-26   absolute/relative z
-27   absolute/relative x
-28   absolute/relative y 
-29   direct/indirect z
-30   direct/indirect x
-31   direct/indirect y
-```
 
 ### Adressing:
 #### Direct:
