@@ -38,7 +38,9 @@ reg [31:0] PC;
 reg [31:0] command;
 reg [31:0] op1, op2, st_op;
 
-reg [31:0] reg_a, reg_b, reg_c;
+reg signed [31:0] reg_a, reg_b;
+
+wire [31:0] reg_c;
 
 reg skip;
 
@@ -56,6 +58,34 @@ wire [31:0] f_data_o;
 reg [1:0] thread;
 
 reg [31:0] addr;
+
+reg alu_carry;
+wire alu_ocarry;
+
+wire [31:0] alu_summ, alu_sub, alu_ashiftl1, alu_ashiftr;
+wire [31:0] alu_lshiftl, alu_lshiftr;
+wire [31:0] alu_mult_h;
+wire [31:0] alu_mult_l;
+wire [31:0] alu_zand, alu_zor, alu_zxor, alu_znot;
+
+
+ALU alu_module(
+        reg_a,
+	reg_b, 
+	alu_carry, 
+	alu_summ, 
+	alu_ocarry, 
+        alu_mult_h, 
+	alu_mult_l, 
+	alu_zand, 
+	alu_zor, 
+	alu_zxor, 
+	alu_znot,
+        alu_sub, 
+	alu_ashiftl, 
+	alu_ashiftr, 
+	alu_lshiftl, 
+	alu_lshiftr);
 
 FETCH fetch_module(
 	clk, 
