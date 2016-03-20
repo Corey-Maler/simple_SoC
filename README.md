@@ -14,31 +14,7 @@ Read [HellyRISC architecture overview](https://github.com/Corey-Maler/simple_SoC
 3. CPU-enabled flag it turn-on and calling RESET interrupt.
 
 
-### Adressing:
-#### Direct:
-`$r0 - $r15` registers
-`xxxx` RAM or direct address
 
-#### indirect
-`@r0 - @r15` registers
-`@xxxx`
-
-#### relative
-`+xxxx`
-
-```
-+s -- relative to $SP | 0000_xxx
-+p -- relative to $PC | 1000_xxx
-```
-
-#### constant
-* `b1100_1111` // binary
-* `o1223_3212` // octal
-* `d10` // deceminal
-* `h12` // hex
-
-#### get addr
-`&($xxxx | @xxxx | var_name)`
 
 
 ### Multi CPU and threads
