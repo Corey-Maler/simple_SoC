@@ -67,6 +67,7 @@ wire [31:0] alu_lshiftl, alu_lshiftr;
 wire [31:0] alu_mult_h;
 wire [31:0] alu_mult_l;
 wire [31:0] alu_zand, alu_zor, alu_zxor, alu_znot;
+wire [31:0] alu_revers;
 
 
 ALU alu_module(
@@ -85,7 +86,9 @@ ALU alu_module(
 	alu_ashiftl, 
 	alu_ashiftr, 
 	alu_lshiftl, 
-	alu_lshiftr);
+	alu_lshiftr,
+	alu_revers
+	);
 
 FETCH fetch_module(
 	clk, 

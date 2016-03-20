@@ -13,11 +13,11 @@ wire [31:0] zand, zor, zxor, znot;
 
 wire signed [31:0] sub, ashiftl, ashiftr;
 
-wire [31:0] lshiftl, lshiftr;
+wire [31:0] lshiftl, lshiftr, revers;
 
 reg fake;
 
-ALU alu1(x, y, carry, summ, ocarry, mult_h, mult_l, zand, zor, zxor, znot, sub, ashiftl, ashiftr, lshiftl, lshiftr);
+ALU alu1(x, y, carry, summ, ocarry, mult_h, mult_l, zand, zor, zxor, znot, sub, ashiftl, ashiftr, lshiftl, lshiftr, revers);
 
 initial
 begin
@@ -69,6 +69,7 @@ y <= 32'b1111_0000_1010_0101_1100_1001_0110_1011;
 `ASSERT(zxor, 32'b1100_0011_1001_0110_1111_1010_0101_1000, "XOR")
 `ASSERT(znot, 32'b1100_1100_1100_1100_1100_1100_1100_1100, "OR")
 
+
 x <= 10;
 y <= -20;
 
@@ -86,6 +87,13 @@ y <= 32'h0000_0002;
 `ASSERT(ashiftr, 32'b1110_0000_0000_0000_0000_0000_1100_0000, "Shift left")
 `ASSERT(lshiftl, 32'b0000_0000_0000_0000_0000_1100_0000_0100, "Shift left")
 `ASSERT(lshiftr, 32'b0010_0000_0000_0000_0000_0000_1100_0000, "Shift left")
+
+
+x <= 32'b1111_0000_1010_1010_0001_0011_0111_1111;
+
+#10 fake <= 1'b1;
+
+`ASSERT(revers, 32'b1111_1110_1100_1000_0101_0101_0000_1111, "Check revers")
 
 end
 

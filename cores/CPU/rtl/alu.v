@@ -14,7 +14,8 @@ module ALU(
 
    output wire [31:0] sub, ashiftl, ashiftr,
 
-   output wire [31:0] lshiftl, lshiftr
+   output wire [31:0] lshiftl, lshiftr,
+   output wire [31:0] revers
 );
 
 assign {ocarry, summ} = x + y + carry;
@@ -32,5 +33,8 @@ assign ashiftr = x >>> y;
 
 assign lshiftl = x << y;
 assign lshiftr = x >> y;
+
+genvar i;
+for (i = 0; i < 32; i = i + 1) assign revers[i] = x[31 - i];
 
 endmodule
