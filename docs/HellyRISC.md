@@ -20,27 +20,26 @@
 
 ## Memory map
 
-| segment |    a        | b     | c                                 | d    |
-|     ---:|         ---:| :---  | :---                              | :--- |
-| `h00_`  |   h_0_00_x  |       | hardware interrupts vector table  |      |
-|         |   h_0_01_x  |       | software interrupts vector table  |      |
-|         |   h_0_02_0  |       | user interrupts                   |      |
-|         |             |       |                                   |      |
-| `h11_`  |             |       |                                   |      |
-|         | h_0_01_x    |       | users register                    |      |
-|         | h_0_02_x    |       | system registers                  |      |
-|         |             | _0    | status and flag register          |      |
-|         |             | _1    | interrupt timer ....              |      |
-|         |             | _2    | General interrupts mask           |      |
-|         |             | _3    |                                   |      |
-|         |             | _4    |                                   |      |
-|         |             | _6    |                                   |      |
-|         |             | _7    | Link register ($LR)               |      |
-|         |             | _8    | Programm counter ($PC)            |      |
-|         |             | _13   | Multiply HIGH			    |      |
-|         |             | _15   | CPU_ID                            |      |
-|         | h_1_1x_x    |       | GPU commutation space             |      |
-|         | h_1_2x_x    |       |                                   |      |
+| segment |    a               | b     | c                                 | d    |
+|     ---:|                ---:| :---  | :---                              | :--- |
+| `b00_`  |   h_0_00_x         |       | hardware interrupts vector table  |      |
+|         |   h_0_01_x         |       | software interrupts vector table  |      |
+|         |   h_0_02_0         |       | user interrupts                   |      |
+|         |                    |       |                                   |      |
+| `b11_`  |                    |       |                                   |      |
+|         | b11_00_00_.._1_x    |       | users register                    |      |
+|         | b11_00_00_.._2_x    |       | system registers                  |      |
+|         |                    | _0    | status and flag register          |      |
+|         |                    | _1    | interrupt timer ....              |      |
+|         |                    | _2    | General interrupts mask           |      |
+|         |                    | _3    |                                   |      |
+|         |                    | _4    |                                   |      |
+|         |                    | _6    |                                   |      |
+|         |                    | _7    | Link register ($LR)               |      |
+|         |                    | _8    | Programm counter ($PC)            |      |
+|         |                    | _13   | Multiply HIGH			    |      |
+|         |                    | _15   | CPU_ID                            |      |
+|         | b11_00_01_..        |       | Devices table                     |      |
 
 
 
@@ -130,3 +129,35 @@ Instruction struct:
 | 001  | h0A	| REV		| z, x		| Reverse			| z = 0 - x			|
 | 001  | h0D	| SUB		| z, x, y	| Sub				| z = x - y			|
 | 000  | h18    | WFI		| -		| Wait for interrupt		| 				|
+
+
+#### Addressing
+
+##### Direct
+
+Load directly by address
+
+`$r` -- direct to register
+
+`xxxx` -- absolute by RAM address
+
+#### Indirect
+
+Load from address stored in `addr`.
+
+`@r` or `@xxxx`
+
+#### Relative
+
+`PC+shift` -- relative to PC | `b0001_xxxx`
+
+`ST+shift` -- relative to stack | `b0000_xxxx`
+
+
+#### Relative-indirect
+
+Relative can be combined with indirect. Was be:
+
+Load `[addr]` from `PC|ST + shift `, then load data from `[addr]`
+
+## Devices table
