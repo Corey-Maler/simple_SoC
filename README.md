@@ -14,36 +14,6 @@ Read [HellyRISC architecture overview](https://github.com/Corey-Maler/simple_SoC
 3. CPU-enabled flag it turn-on and calling RESET interrupt.
 
 
-### instruction set summary
-
-| Mnemonic | Operands | Brief description | Flags | Operation |
-| --- | --- | --- | --- | --- |
-| ADD | z, x, y |  Add |  | z = x + y  |      |
-| AND | z, x, y | Bitwise AND |  | z = x & y |
-| BRN | label | Branch | | $CP = label |
-| BRNR | shift | Branch relative | $CP = $CP + shift |
-| BRL | label | Branch and link | | $LR = $CP; $CP = label |
-| BRLR | shift | Branch and link relative | | $LR = $CP; $CP = $CP + shift |
-| CMN | x, y | Compare soft (bigger or equal)| | $rf[2] = x >= y |
-| CMP | x, y | Compare  |  | $rf[2] = x > y |
-| INT | x | software interrup |  |  |
-| XOR | z, x, y | Exclusive or | | z = x ^ y |
-| MOV | z, x | Move x to z | | z <= x |
-| lsls | z, x, y | logical shift left | | z = x << y |
-| lsrs | z, x, y | logical shift right | | z = x >> y |
-| MUL | z, x, y | Multiply | | z = x * y |
-| NOT | z, x | Bitwise NOT | | z = !x |
-| NOP | - | No Operation | | |
-| ORR | z, x, y | OR | | z = x \| y |
-| POP | r | pop register from stack | | |
-| PUSH| r | push register to stack | | |
-| REV | z, x | byte-reverse word | | |
-| RORS | z, x, y | Rotate Right | | |
-| RSVS | z, x | Reverse int | | z = 0 - x |
-| SUB | z, x, y | sub | | z = x - y |
-| WFI | - | Wait for Interrupt | | |
-
-
 ### Adressing:
 #### Direct:
 `$r0 - $r15` registers

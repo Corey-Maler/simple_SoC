@@ -37,6 +37,7 @@
 |         |             | _6    |                                   |      |
 |         |             | _7    | Link register ($LR)               |      |
 |         |             | _8    | Programm counter ($PC)            |      |
+|         |             | _13   | Multiply HIGH			    |      |
 |         |             | _15   | CPU_ID                            |      |
 |         | h_1_1x_x    |       | GPU commutation space             |      |
 |         | h_1_2x_x    |       |                                   |      |
@@ -105,9 +106,27 @@ Instruction struct:
 | ---: |   ---: | :---     	| :---     	| :---              		| :---				|
 | 001  | h01    | ADD         	| z, x, y  	| Add               		| z = x + y			|
 | 001  | h02    | AND	 	| z, x, y  	| Bitwise AND			| z = x & y			|
+| 001  | h0B    | ASL		| z, x, y	| Arifmetical shift left	| z = x << y			|
+| 001  | h0C    | ASR		| z, x, y	| Arifmetical shift right	| z = x << y			|
 | 000  | h01    | BRN		| label	   	| Branch			| $CP = label			|
 | 000  | h02    | BRNR		| shift	   	| Branch relative		| $CP = $CP + shift		|
 | 000  | h03    | BRL		| label    	| Branch and link		| $LR = $PC; $CP = label	|
 | 000  | h04    | BRLR		| shift    	| Branch and link relative	| $LR = $PC; $CP = $CP + shift	|
 | 000  | h05    | BRF		| label, x, y	| Branch with fast check	| if (y == x) $CP = label       |
 | 000  | h06    | BRLF		| label, x, y	| Branch and link with f. check	| if (y == x) $LR = $CP; $CP = label       |
+| 000  | h07-F  | ---		|		| reserver			| 				|
+| 001  | h03	| CMP		| x, y		| Compare 			| set flags 			| 
+| 000  | h10	| INT		| x		| Software interrupt		| 				|
+| 001  | h04    | XOR		| z, x, y	| Exclusive or			| z = x ^ y			|
+| 000  | h15	| MOV		| z, x		| Move x to z			| z = x				|
+| 001  | h05    | LSLS          | z, x, y	| Logical shift left		| z = x << y			|
+| 001  | h06    | LSRS		| z, x, y	| Logical shift right		| z = x >> y			|
+| 001  | h07    | MUL		| z, x, y	| Multiply			| {$rmh, z} = x * y		|
+| 001  | h08    | NOT		| z, x		| Bitwise NOT			| z = !x			|
+| 000  | h00	| NOP		| -		| No Operation			|				|
+| 001  | h09    | ORR           | z, x, y       | Bitwise Or			| z = x | y			|
+| 000  | h16    | POP		| r		| Pop from stack		| 				|
+| 000  | h17    | PUSH		| r		| Push to stack			|				|
+| 001  | h0A	| REV		| z, x		| Reverse			| z = 0 - x			|
+| 001  | h0D	| SUB		| z, x, y	| Sub				| z = x - y			|
+| 000  | h18    | WFI		| -		| Wait for interrupt		| 				|
