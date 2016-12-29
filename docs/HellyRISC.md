@@ -161,3 +161,30 @@ Relative can be combined with indirect. Was be:
 Load `[addr]` from `PC|ST + shift `, then load data from `[addr]`
 
 ## Devices table
+
+
+# HellyRISC Async work mode
+
+## brief
+
+### task queue
+
+Task queue store sequence of tasks, which one by one processing by CPU's.
+
+| IP | ST | FR | R1 |
+| -: | -: | -: | -: |
+
+Pushing task to queue:
+
+```
+BRNC ; make a new brunch (and initialize new stack)
+PUSH $ST1 $r1 ; push value to created stack
+PUSH $ST1 $ST ; push another 
+PUSH $ST1 $PC+2 ; push processing callback function
+SNDQ :some_async_func #{$ST1} ; send task to queue
+PQ ; change to another task
+ADD ; return point from async task
+MUL ; take from stack to values and multiply them
+MV #1000_0001 ; send some data to some external device
+PQ ; change to another task
+```
